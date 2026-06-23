@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MIAPI_UTN001.Migrations
 {
     [DbContext(typeof(MIAPI_UTN001Context))]
-    [Migration("20260514133502_VersionPostgres")]
-    partial class VersionPostgres
+    [Migration("20260613000816_V03")]
+    partial class V03
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,7 @@ namespace MIAPI_UTN001.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("MIAPI_UTN001.Models.Cargo", b =>
+            modelBuilder.Entity("MiApp.UTN.Modelos.Cargo", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -46,7 +46,7 @@ namespace MIAPI_UTN001.Migrations
                     b.ToTable("Cargos");
                 });
 
-            modelBuilder.Entity("MIAPI_UTN001.Models.Empleado", b =>
+            modelBuilder.Entity("MiApp.UTN.Modelos.Empleado", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -79,7 +79,7 @@ namespace MIAPI_UTN001.Migrations
                     b.ToTable("Empleados");
                 });
 
-            modelBuilder.Entity("MIAPI_UTN001.Models.Persona", b =>
+            modelBuilder.Entity("MiApp.UTN.Modelos.Persona", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -112,17 +112,17 @@ namespace MIAPI_UTN001.Migrations
                     b.ToTable("Personas");
                 });
 
-            modelBuilder.Entity("MIAPI_UTN001.Models.Empleado", b =>
+            modelBuilder.Entity("MiApp.UTN.Modelos.Empleado", b =>
                 {
-                    b.HasOne("MIAPI_UTN001.Models.Cargo", "Cargo")
+                    b.HasOne("MiApp.UTN.Modelos.Cargo", "Cargo")
                         .WithMany("Empleados")
                         .HasForeignKey("CargoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("MIAPI_UTN001.Models.Persona", "Persona")
+                    b.HasOne("MiApp.UTN.Modelos.Persona", "Persona")
                         .WithOne("Empleado")
-                        .HasForeignKey("MIAPI_UTN001.Models.Empleado", "PersonaId")
+                        .HasForeignKey("MiApp.UTN.Modelos.Empleado", "PersonaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -131,12 +131,12 @@ namespace MIAPI_UTN001.Migrations
                     b.Navigation("Persona");
                 });
 
-            modelBuilder.Entity("MIAPI_UTN001.Models.Cargo", b =>
+            modelBuilder.Entity("MiApp.UTN.Modelos.Cargo", b =>
                 {
                     b.Navigation("Empleados");
                 });
 
-            modelBuilder.Entity("MIAPI_UTN001.Models.Persona", b =>
+            modelBuilder.Entity("MiApp.UTN.Modelos.Persona", b =>
                 {
                     b.Navigation("Empleado");
                 });

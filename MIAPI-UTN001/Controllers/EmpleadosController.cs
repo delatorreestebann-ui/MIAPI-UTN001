@@ -20,6 +20,7 @@ namespace MIAPI_UTN001.Controllers
         {
             _context = context;
         }
+
         [HttpGet("EstadisticaSalarios")]
         public async Task<ActionResult<EstadisticaSalarios>> EstadisticaSalarios()
         {
@@ -46,17 +47,21 @@ namespace MIAPI_UTN001.Controllers
                 SalarioPromedio = salarioPromedio,
                 PagoTotal = pagoTotal,
                 CantidadEmpleados = cantidadEmpleados,
-                EmpleadoAntiguo= empleadoAntiguo != null ? $"{empleadoAntiguo.Persona.Nombre} {empleadoAntiguo.Persona.Apellido}" : "N/A",
+                EmpleadoAntiguo = empleadoAntiguo != null ? $"{empleadoAntiguo.Persona.Nombre} {empleadoAntiguo.Persona.Apellido}" : "N/A",
                 EmpleadoReciente = empleadoReciente != null ? $"{empleadoReciente.Persona.Nombre} {empleadoReciente.Persona.Apellido}" : "N/A"
             };
 
             return resultado;
         }
+
         // GET: api/Empleados
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Empleado>>> GetEmpleado()
         {
-            return await _context.Empleados.ToListAsync();
+            return await _context.Empleados
+                .Include(e => e.Persona)
+                .Include(c => c.Cargo)
+                .ToListAsync();
         }
 
         // GET: api/Empleados/5
@@ -65,9 +70,9 @@ namespace MIAPI_UTN001.Controllers
         {
             var empleado = await _context
                 .Empleados
-                .Include(e=> e.Persona)
-                .Include(e=> e.Cargo)
-                .Where(e=> e.Id == id)
+                .Include(e => e.Persona)
+                .Include(e => e.Cargo)
+                .Where(e => e.Id == id)
                 .FirstOrDefaultAsync();
 
             if (empleado == null)
@@ -79,13 +84,18 @@ namespace MIAPI_UTN001.Controllers
         }
 
         // PUT: api/Empleados/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutEmpleado(int id, Empleado empleado)
         {
             if (id != empleado.Id)
             {
                 return BadRequest();
+            }
+
+            // AJUSTE DE BUENA PRÁCTICA: Convertir fecha a UTC al editar
+            if (empleado.FechaIngreso != null)
+            {
+                empleado.FechaIngreso = DateTime.SpecifyKind(empleado.FechaIngreso, DateTimeKind.Utc);
             }
 
             _context.Entry(empleado).State = EntityState.Modified;
@@ -110,10 +120,15 @@ namespace MIAPI_UTN001.Controllers
         }
 
         // POST: api/Empleados
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Empleado>> PostEmpleado(Empleado empleado)
         {
+            // AJUSTE DE BUENA PRÁCTICA: Convertir fecha a UTC al crear
+            if (empleado.FechaIngreso != null)
+            {
+                empleado.FechaIngreso = DateTime.SpecifyKind(empleado.FechaIngreso, DateTimeKind.Utc);
+            }
+
             _context.Empleados.Add(empleado);
             await _context.SaveChangesAsync();
 

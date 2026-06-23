@@ -1,0 +1,41 @@
+@using MiApp.UTN.Modelos
+@model Empleado
+
+@{
+    ViewData["Title"] = "Detalle Empleado";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Detalle Empleado</h2>
+    <a asp-action="Index" class="btn btn-secondary">Volver</a>
+</div>
+
+<table class="table table-bordered">
+    <tr>
+        <th>Id</th>
+        <td>@Model.Id</td>
+    </tr>
+
+    <tr>
+        <th>Salario</th>
+        <td>@Model.Salario</td>
+    </tr>
+    <tr>
+        <th>Comisión</th>
+        <td>@Model.Comisiono</td>
+    </tr>
+    <tr>
+        <th>Fecha de Ingreso</th>
+        <td>@Model.FechaIngreso.ToShortDateString()</td>
+    </tr>
+    <tr>
+        <th>Persona ID</th>
+        <td>@Model.PersonaId</td>
+    </tr>
+    <tr>
+        <th>Cargo ID</th>
+        <td>@Model.CargoId</td>
+    </tr>
+</table>
+
+<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Editar</a>

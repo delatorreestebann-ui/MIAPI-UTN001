@@ -1,5 +1,8 @@
 using Api.Consummer;
+using MiApp.MVC.Data;
 using MiApp.UTN.Modelos;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace MiApp.MVC
 {
@@ -13,6 +16,12 @@ namespace MiApp.MVC
             Crud<Empleado>.Endpoint = "https://localhost:7020/api/Empleados";
 
             var builder = WebApplication.CreateBuilder(args);
+
+            // Add services to the container.
+            builder.Services.AddDbContext<MiAppMVCContext>(options =>
+                 // Configurar los endpoints para cada entidad, 3 instancias de
+                 // Crud<T> para cada una de las entidades
+                 options.UseNpgsql(builder.Configuration.GetConnectionString("MiAppMVCContext") ?? throw new InvalidOperationException("Connection string 'MiAppMVCContext' not found.")));
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();

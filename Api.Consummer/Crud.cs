@@ -40,7 +40,7 @@ namespace Api.Consummer
                         throw new Exception(response.ReasonPhrase);
                 }
             }      
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }
@@ -101,7 +101,7 @@ namespace Api.Consummer
             using (var httpClient = new HttpClient()) {
                 var request = new HttpRequestMessage(HttpMethod.Delete, $"{Endpoint}/{id}");
                 var response = httpClient.Send(request);
-                if (!response.IsSuccessStatusCode)
+                if (response.IsSuccessStatusCode)
                     return true;
                 else
                     throw new Exception(response.ReasonPhrase);

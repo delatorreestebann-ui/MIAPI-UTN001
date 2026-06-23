@@ -8,6 +8,7 @@ namespace MiApp.UTN.Modelos
 {
     public class EstadisticaCargos
     {
+        public int Id { get; set; }
         public string Cargo { get; set; }
         public int CantidadEmpleados { get; set; }
         public double SalarioTotal { get; set; }

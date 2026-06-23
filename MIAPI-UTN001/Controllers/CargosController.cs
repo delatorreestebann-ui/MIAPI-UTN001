@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MIAPI_UTN001.Data;
 using MiApp.UTN.Modelos;
-
 namespace MIAPI_UTN001.Controllers
 {
     [Route("api/[controller]")]

@@ -1,0 +1,124 @@
+using Api.Consummer;
+using MiApp.UTN.Modelos;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+
+namespace MiApp.MVC.Controllers
+{
+    public class EmpleadosController : Controller
+    {
+        // GET: EmpleadosController
+        public ActionResult Index()
+        {
+            var empleados = Crud<Empleado>.ReadAll();
+            return View(empleados);
+        }
+
+        // GET: EmpleadosController/Details/5
+        public ActionResult Details(string id)
+        {
+            var datos = Crud<Empleado>.ReadById(id);
+            return View(datos);
+        }
+        private void LeerListaDatos()
+        {
+            var ListaPersonas = Crud<Persona>.ReadAll();
+            var ListaCargos = Crud<Cargo>.ReadAll();
+
+            ViewBag.selectListaPersonas = ListaPersonas.Select(p =>
+                new SelectListItem
+                {
+                    Value = p.Id.ToString(),
+                    Text = $"{p.Id} - {p.Nombre} {p.Apellido}"
+                })
+                .OrderBy(i => i.Text)
+                .ToList();
+
+            ViewBag.selectListCargos = ListaCargos.Select(
+                c => new SelectListItem
+                {
+                    Value = c.Id.ToString(),
+                    Text = c.Name
+                })
+                .OrderBy(i => i.Text)
+                .ToList();
+
+        }
+        // GET: EmpleadosController/Create
+        public ActionResult Create()
+        {
+            LeerListaDatos();
+            return View();
+        }
+
+        // POST: EmpleadosController/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create(Empleado data)
+        {
+            try
+            {
+                var nuevoEmpleado = Crud<Empleado>.Create(data);
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                LeerListaDatos();
+                return View(data);
+            }
+        }
+
+        // GET: EmpleadosController/Edit/5
+        public ActionResult Edit(int id)
+        {
+            var datos = Crud<Empleado>.ReadById(id.ToString());
+            LeerListaDatos();
+            return View(datos);
+        }
+
+        // POST: EmpleadosController/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(int id, Empleado datos)
+        {
+            try
+            {
+                Crud<Empleado>.Update(id.ToString(), datos);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                ViewData["Error"] = ex.Message;
+                LeerListaDatos();
+                return View(datos);
+            }
+        }
+
+        // GET: EmpleadosController/Delete/5
+        public ActionResult Delete(string id)
+        {
+            var datos = Crud<Empleado>.ReadById(id);
+            LeerListaDatos();
+            return View(datos);
+        }
+
+        // POST: EmpleadosController/Delete/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Delete(string id, Empleado datos)
+        {
+            try
+            {
+                Crud<Empleado>.Delete(id);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                ViewData["Error"] = ex.Message;
+                LeerListaDatos();
+                return View(datos);
+            }
+        }
+    }
+}

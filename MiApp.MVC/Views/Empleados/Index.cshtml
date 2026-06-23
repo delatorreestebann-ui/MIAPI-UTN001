@@ -1,0 +1,41 @@
+@using MiApp.UTN.Modelos
+@model IEnumerable<Empleado>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Empleados</h2>
+    <a asp-action="Create" class="btn btn-primary">Agregar</a>
+</div>
+
+<table class="table table-bordered table-hover">
+    <thead class="table-light">
+        <tr>
+            <th>Id</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Salario</th>
+            <th>Comisión</th>
+            <th>Fecha de Ingreso</th>
+            <th>Cargo</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var empleado in Model)
+        {
+            <tr>
+                <td>@empleado.Id</td>
+                <td>@empleado.Persona?.Nombre</td>
+                <td>@empleado.Persona?.Apellido</td>
+                <td>@empleado.Salario.ToString("C")</td>
+                <td>@empleado.Comisiono.ToString("C")</td>
+                <td>@empleado.FechaIngreso.ToShortDateString()</td>
+                <td>@empleado.Cargo?.Name</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@empleado.Id" class="btn btn-sm btn-warning">Editar</a>
+                    <a asp-action="Details" asp-route-id="@empleado.Id" class="btn btn-sm btn-info">Detalles</a>
+                    <a asp-action="Delete" asp-route-id="@empleado.Id" class="btn btn-sm btn-danger">Eliminar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
